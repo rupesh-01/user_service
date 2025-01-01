@@ -1,5 +1,6 @@
 package com.example.user_service.services.impl;
 
+import com.example.user_service.dtos.SendEmailDto;
 import com.example.user_service.exceptions.TokenCountExceededException;
 import com.example.user_service.exceptions.ValidTokenNotFoundException;
 import com.example.user_service.models.Token;
@@ -7,7 +8,11 @@ import com.example.user_service.models.User;
 import com.example.user_service.repostories.TokenRepository;
 import com.example.user_service.repostories.UserRepository;
 import com.example.user_service.services.AuthService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -15,21 +20,25 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
     private final TokenRepository tokenRepository;
+    private final KafkaTemplate<String, String> kafkaTemplate;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
-    public AuthServiceImpl(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder, TokenRepository tokenRepository) {
+    public AuthServiceImpl(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder, TokenRepository tokenRepository, KafkaTemplate<String, String> kafkaTemplate) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.tokenRepository = tokenRepository;
+        this.kafkaTemplate = kafkaTemplate;
     }
 
 
     @Override
-    public User signUp(String name, String mobile, String email, String password) {
+    public User signUp(String name, String mobile, String email, String password) throws JsonProcessingException {
         Optional<User> userDetails = userRepository.findByEmail(email);
         if(userDetails.isPresent()){
             return userDetails.get();
@@ -39,7 +48,19 @@ public class AuthServiceImpl implements AuthService {
         user.setEmail(email);
         user.setPassword(passwordEncoder.encode(password));
         user.setMobile(mobile);
+        //send the email to the user
+        SendEmailDto sendEmailDto = new SendEmailDto();
+        sendEmailDto.setTo(user.getEmail());
+        sendEmailDto.setSubject("Welcome to AB2A!");
+        sendEmailDto.setBody("Welcome to Absolute Beginner to Advanced. We wish you happy learning!");
+        kafkaTemplate.send(
+                "sendEmail",
+                objectMapper.writeValueAsString(sendEmailDto)
+        );
+        log.info("Sent dto to kafka");
         return userRepository.save(user);
+
+
     }
 
     @Override
