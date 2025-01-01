@@ -1,6 +1,7 @@
 package com.example.user_service.models;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
@@ -15,6 +16,6 @@ public class User extends BaseModel {
     private String email;
     private String mobile;
     private String password;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     List<Role> roles;
 }
