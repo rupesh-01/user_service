@@ -49,15 +49,15 @@ public class AuthServiceImpl implements AuthService {
         user.setPassword(passwordEncoder.encode(password));
         user.setMobile(mobile);
         //send the email to the user
-        SendEmailDto sendEmailDto = new SendEmailDto();
-        sendEmailDto.setTo(user.getEmail());
-        sendEmailDto.setSubject("Welcome to AB2A!");
-        sendEmailDto.setBody("Welcome to Absolute Beginner to Advanced. We wish you happy learning!");
-        kafkaTemplate.send(
-                "sendEmail",
-                objectMapper.writeValueAsString(sendEmailDto)
-        );
-        log.info("Sent dto to kafka");
+//        SendEmailDto sendEmailDto = new SendEmailDto();
+//        sendEmailDto.setTo(user.getEmail());
+//        sendEmailDto.setSubject("Welcome to AB2A!");
+//        sendEmailDto.setBody("Welcome to Absolute Beginner to Advanced. We wish you happy learning!");
+//        kafkaTemplate.send(
+//                "sendEmail",
+//                objectMapper.writeValueAsString(sendEmailDto)
+//        );
+//        log.info("Sent dto to kafka");
         return userRepository.save(user);
 
 

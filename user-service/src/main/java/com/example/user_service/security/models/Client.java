@@ -19,24 +19,18 @@ public class Client {
     private Instant clientSecretExpiresAt;
     private String clientName;
     @Column(length = 1000)
-    @Lob
     private String clientAuthenticationMethods;
     @Column(length = 1000)
-    @Lob
     private String authorizationGrantTypes;
     @Column(length = 1000)
-    @Lob
     private String redirectUris;
     @Column(length = 1000)
-    @Lob
     private String postLogoutRedirectUris;
     @Column(length = 1000)
     private String scopes;
     @Column(length = 2000)
-    @Lob
     private String clientSettings;
     @Column(length = 2000)
-    @Lob
     private String tokenSettings;
 
 }

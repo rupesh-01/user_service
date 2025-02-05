@@ -9,6 +9,7 @@ import org.springframework.security.oauth2.core.oidc.OidcScopes;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.settings.ClientSettings;
+import org.springframework.test.annotation.Commit;
 
 import java.util.UUID;
 
@@ -21,6 +22,7 @@ class UserServiceApplicationTests {
 	}
 
 //	@Test
+//	@Commit
 //	public void saveCreds(){
 //		RegisteredClient oidcClient = RegisteredClient.withId(UUID.randomUUID().toString())
 //                .clientId("oidc-client")
@@ -28,10 +30,11 @@ class UserServiceApplicationTests {
 //                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
 //                .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
 //                .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
-//                .redirectUri("http://127.0.0.1:8080/login/oauth2/code/oidc-client")
-//                .postLogoutRedirectUri("http://127.0.0.1:8080/")
+//                .redirectUri("https://oauth.pstmn.io/v1/callback")
+//                .postLogoutRedirectUri("https://oauth.pstmn.io/v1/callback")
 //                .scope(OidcScopes.OPENID)
 //                .scope(OidcScopes.PROFILE)
+//				.scope("ADMIN")
 //                .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
 //                .build();
 //		repository.save(oidcClient);

@@ -77,11 +77,8 @@ public class SecurityConfig {
             throws Exception {
         http
                 .authorizeHttpRequests((authorize) -> authorize
-                        .anyRequest().permitAll()
+                        .anyRequest().authenticated()
                 )
-                .cors().disable()
-                .csrf().disable()
-
                 // Form login handles the redirect to the login page from the
                 // authorization server filter chain
                 .formLogin(Customizer.withDefaults());
@@ -89,16 +86,16 @@ public class SecurityConfig {
         return http.build();
     }
 
-//    @Bean
-//    public UserDetailsService userDetailsService() {
-//        UserDetails userDetails = User.builder()
-//                .username("user")
-//                .password("$2a$12$TkmrT6tkIbubdxwWR0/jpuA.ZMZS0hQh9dfdMQ/Xb8vl6xRL4NMQ2") // encypted password for mypass(raw)
-//                .roles("USER")
-//                .build();
-//
-//        return new InMemoryUserDetailsManager(userDetails);
-//    }
+    @Bean
+    public UserDetailsService userDetailsService() {
+        UserDetails userDetails = User.builder()
+                .username("user")
+                .password("$2a$12$TkmrT6tkIbubdxwWR0/jpuA.ZMZS0hQh9dfdMQ/Xb8vl6xRL4NMQ2") // encypted password for mypass(raw)
+                .roles("USER")
+                .build();
+
+        return new InMemoryUserDetailsManager(userDetails);
+    }
 
 //    @Bean
 //    public RegisteredClientRepository registeredClientRepository() {
